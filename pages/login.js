@@ -8,14 +8,17 @@ export default function AuthGithubPage() {
   const [name, setName] = useState('');
   const [accessToken, setAccessToken] = useState('');
 
-  const { query: { code } } = useRouter();
+  const { query: { code, state } } = useRouter();
 
   const handleClick = async () => {
-    const { data } = await axios.post('http://localhost:3000/api/token', {
-      code,
-    });
-
-    setAccessToken(data.access_token);
+    try {
+      const { data } = await axios.post('/api/token', {
+        code, state
+      });
+      setAccessToken(data.access_token);
+    } catch (err) { 
+      alert(err.response.data.message);
+    }
   };
 
   const handleClickRequest = async () => {
